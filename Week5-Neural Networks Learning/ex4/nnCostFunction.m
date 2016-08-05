@@ -80,21 +80,32 @@ l2a = [ones(length(l2a),1),l2a];
 
 %Now calculate z and h(z) values for layer 3 - output layer
 l3z = l2a*Theta2';
-hx = sigmoid(l3z);
+l3a = sigmoid(l3z);
 
 %Calculating cost function
-ksum = diag(-yrcd*log(hx)') - diag((1-yrcd)*log(1-hx)');
-Junreg = (1/m)*sum(ksum);
+ksum = diag(-yrcd * log(l3a)') - diag((1 - yrcd) * log(1 - l3a)');
+Junreg = (1/m) * sum(ksum);
 
 % Regularization
-Theta1R = Theta1(:,2:end); % Remove the first column of bias term Thetas
-Theta2R = Theta2(:,2:end); % Remove the first column of bias term Thetas
+Theta1R = Theta1;
+Theta2R = Theta2;
+Theta1R(:,1) = 0; % Remove the first column of bias term Thetas
+Theta2R(:,1) = 0; % Remove the first column of bias term Thetas
 
 %First vectorize the regd Theta matrices, and then (sum the squares of both regd Thetas) * lambda/2m
 lamTerm = (lambda/(2*m))*(Theta1R(:)'*Theta1R(:) + Theta2R(:)'*Theta2R(:));
 
 J = Junreg + lamTerm;
 % -------------------------------------------------------------
+% Backpropagation
+delta3 = l3a - yrcd;
+delta2 = (delta3*Theta2)(:,2:end).*sigmoidGradient(l2z);
+
+
+Theta2_grad = (delta3'*l2a + Theta2R.*lambda)./m;
+Theta1_grad = (delta2'*X + Theta1R.*lambda)./m;
+
+
 
 % =========================================================================
 
