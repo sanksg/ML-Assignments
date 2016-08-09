@@ -58,15 +58,17 @@ for i = 1:m
 	theta = trainLinearReg(Xtrain, ytrain, lambda);
 	
 	%Training set error
-	hxtrain = Xtrain*theta
-	Jtrain = (1/(2*m)).*(hxtrain - ytrain)' * (hxtrain - ytrain)
-	Jtrain = linearRegCostFunction(Xtrain, ytrain, theta, 0)
+	hxtrain = Xtrain*theta;
+	
+	Jtrain = (1/(2*i)).*(hxtrain - ytrain)' * (hxtrain - ytrain);
+	% Jtrain = linearRegCostFunction(Xtrain, ytrain, theta, 0)
 	error_train(i) = Jtrain;
 	
 	%Validation set error
+	mval = length(yval);
 	hxval = Xval*theta;
-	Jval = (1/(2*m)) .* (hxval - yval)' * (hxval - yval)
-	Jval = linearRegCostFunction(Xval, yval, theta, 0)
+	Jval = (1/(2*mval)) .* (hxval - yval)' * (hxval - yval);
+	% Jval = linearRegCostFunction(Xval, yval, theta, 0)
 	error_val(i) = Jval;
 end
 
