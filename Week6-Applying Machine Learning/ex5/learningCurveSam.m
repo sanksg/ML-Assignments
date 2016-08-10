@@ -16,40 +16,41 @@ function [error_train, error_val] = ...
 
 % Number of training examples
 m = size(X, 1);
-size(X)
 
 % You need to return these values correctly
 error_train = zeros(m, 1);
 error_val   = zeros(m, 1);
 
-numRuns = 10;
+numRuns = 50;
 	
-for samSize = 1:m
+for samSize = 1:m	
 	
 	JtrainTot = 0;
 	JvalTot = 0;
 
+    samSize
 	for rpts = 1:numRuns
+		rpts
+		randX = randi(length(X),samSize, 1);
+		randXVal = randi(length(Xval),samSize, 1);
 		
-		randX = randint(samSize,1,length(X))
-		randXVal = randint(samSize,1,length(Xval))
+		Xtrain = X(randX,:);
+		ytrain = y(randX,:);
 		
-		Xi = X(randX)
-		yi = y(randX)
+		Xvali = Xval(randXVal,:);
+		yvali = yval(randXVal,:);
 		
-		Xvali = Xval(randXVal)
-		yvali = yval(randXVal)
+		theta = trainLinearReg(Xtrain, ytrain, lambda);
 		
-		theta = trainLinearReg(Xi, yi, lambda)
-		
-		htrain = Xi*theta;
-		JtrainTot = JtrainTot + (1/(2*length(Xi))) .* (htrain - yi)' * (htrain - yi);
+		htrain = Xtrain*theta;
+		JtrainTot = JtrainTot + (1/(2*length(Xtrain))) .* (htrain - ytrain)' * (htrain - ytrain);
 	
 	
 		hval = Xvali * theta;
-		JvalTot = JvalTot + (1/(2*length(Xvali))) .* (hval - yvali)' * (hval - yvali);
+		JvalTot = JvalTot + (1/(2*length(yvali))) .* (hval - yvali)' * (hval - yvali);
 	end
 	
+
 	error_train(samSize) = JtrainTot/numRuns;
 	error_val(samSize) = JvalTot/numRuns;
 end
