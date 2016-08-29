@@ -28,9 +28,9 @@ for samSize = 1:m
 	JtrainTot = 0;
 	JvalTot = 0;
 
-    samSize
+    
 	for rpts = 1:numRuns
-		rpts
+		
 		randX = randi(length(X),samSize, 1);
 		randXVal = randi(length(Xval),samSize, 1);
 		

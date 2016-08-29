@@ -125,35 +125,35 @@ m = size(X, 1);
 % fprintf('Program paused. Press enter to continue.\n');
 % pause;
 
-% %% =========== Part 6: Feature Mapping for Polynomial Regression =============
-% %  One solution to this is to use polynomial regression. You should now
-% %  complete polyFeatures to map each example into its powers
-% %
+%% =========== Part 6: Feature Mapping for Polynomial Regression =============
+%  One solution to this is to use polynomial regression. You should now
+%  complete polyFeatures to map each example into its powers
+%
 
-% p = 8;
+p = 8;
 
-% % Map X onto Polynomial Features and Normalize
-% X_poly = polyFeatures(X, p);
-% [X_poly, mu, sigma] = featureNormalize(X_poly);  % Normalize
-% X_poly = [ones(m, 1), X_poly];                   % Add Ones
+% Map X onto Polynomial Features and Normalize
+X_poly = polyFeatures(X, p);
+[X_poly, mu, sigma] = featureNormalize(X_poly);  % Normalize
+X_poly = [ones(m, 1), X_poly];                   % Add Ones
 
-% % Map X_poly_test and normalize (using mu and sigma)
-% X_poly_test = polyFeatures(Xtest, p);
-% X_poly_test = bsxfun(@minus, X_poly_test, mu);
-% X_poly_test = bsxfun(@rdivide, X_poly_test, sigma);
-% X_poly_test = [ones(size(X_poly_test, 1), 1), X_poly_test];         % Add Ones
+% Map X_poly_test and normalize (using mu and sigma)
+X_poly_test = polyFeatures(Xtest, p);
+X_poly_test = bsxfun(@minus, X_poly_test, mu);
+X_poly_test = bsxfun(@rdivide, X_poly_test, sigma);
+X_poly_test = [ones(size(X_poly_test, 1), 1), X_poly_test];         % Add Ones
 
-% % Map X_poly_val and normalize (using mu and sigma)
-% X_poly_val = polyFeatures(Xval, p);
-% X_poly_val = bsxfun(@minus, X_poly_val, mu);
-% X_poly_val = bsxfun(@rdivide, X_poly_val, sigma);
-% X_poly_val = [ones(size(X_poly_val, 1), 1), X_poly_val];           % Add Ones
+% Map X_poly_val and normalize (using mu and sigma)
+X_poly_val = polyFeatures(Xval, p);
+X_poly_val = bsxfun(@minus, X_poly_val, mu);
+X_poly_val = bsxfun(@rdivide, X_poly_val, sigma);
+X_poly_val = [ones(size(X_poly_val, 1), 1), X_poly_val];           % Add Ones
 
-% fprintf('Normalized Training Example 1:\n');
-% fprintf('  %f  \n', X_poly(1, :));
+fprintf('Normalized Training Example 1:\n');
+fprintf('  %f  \n', X_poly(1, :));
 
-% fprintf('\nProgram paused. Press enter to continue.\n');
-% pause;
+fprintf('\nProgram paused. Press enter to continue.\n');
+pause;
 
 
 
@@ -250,12 +250,10 @@ m = size(X, 1);
 
 lambda = 0.01;
 [error_train, error_val] = ...
-    learningCurveSam([ones(m, 1) X], y, ...
-                  [ones(size(Xval, 1), 1) Xval], yval, ...
-                  lambda);
+    learningCurveSam(X_poly, y, X_poly_val, yval, lambda);
 
 plot(1:m, error_train, 1:m, error_val);
-title('Learning curve for linear regression')
+title('Learning curve for polynomial linear regression')
 legend('Train', 'Cross Validation')
 xlabel('Number of training examples')
 ylabel('Error')
